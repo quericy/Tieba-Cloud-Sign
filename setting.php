@@ -359,6 +359,18 @@ switch (SYSTEM_PAGE) {
 				doAction('admin_users_clean');
 				break;
 
+            case 'control':
+                $uid = !empty($_POST['user'][0]) ? $_POST['user'][0] : msg('无效用户ID');
+                $osq = $m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE `id` = '{$uid}' LIMIT 1");
+                if(empty($osq['pw'])) msg('用户不存在');
+                doAction('admin_users_control');
+                setcookie("uid", $uid, time() + 999999);
+                setcookie("pwd",substr(sha1(EncodePwd($osq['pw'])) , 4 , 32), time() + 999999);
+                setcookie("con_uid", UID);
+                setcookie("con_pwd", $_COOKIE['pwd']);
+                redirect('index.php');
+                break;
+
 			case 'delete':
 				foreach ($_POST['user'] as $value) {
 					DeleteUser($value);
@@ -532,11 +544,6 @@ switch (SYSTEM_PAGE) {
 			CleanUser(UID);
 			Redirect('index.php?mod=showtb');
 		}
-		elseif (isset($_GET['del'])) {
-			$id = (int) sqladds($_REQUEST['id']);
-			$m->query('DELETE FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$id);
-			Redirect('index.php?mod=showtb&ok');
-			}
 		elseif (isset($_GET['reset'])) {
 			$max = $m->fetch_array($m->query("select max(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
 			$min = $m->fetch_array($m->query("select min(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));

@@ -9,7 +9,7 @@ doAction('index_1');
 		<h3 class="panel-title">程序信息</h3>
 	</div>
 	<div class="panel-body">
-		<span id="avatar" style="float:right;"><img src="<?php echo getGravatar() ?>" alt="您的头像" title="您的头像" class="img-rounded" height='80px' weight='80px' onerror="$('#avatar').html('无法加载头像');"></span>
+		<span id="avatar" style="float:right;"><img src="<?php echo getGravatar() ?>" alt="您的头像" title="您的头像" class="img-rounded" height='80px' width='80px' onerror="$('#avatar').html('无法加载头像');"></span>
 		<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?>.<?php echo SYSTEM_REV ?> <?php echo SYSTEM_VER_NOTE ?>
 		<br/>
 		点击上方导航栏的 功能菜单 可以列出所有功能
@@ -19,6 +19,13 @@ doAction('index_1');
 	<?php doAction('index_p_1'); ?>
 	</div>
 </div>
+
+<?php if(defined('CON_NAME')) {?>
+<div class="alert alert-danger" role="alert">
+	<b><?php echo CON_NAME; ?></b>，你现在正在控制用户 <b><?php echo NAME; ?></b>
+	<br/>点击<a href="index.php?mod=usercontrolback">右上角的 返回 按钮或此处</a>即可返回你的账户
+</div>
+<?php } ?>
 
 <div class="panel panel-<?php if (empty($i['user']['tbnum'])) { echo 'warning'; } else { echo 'success'; } ?>">
 	<div class="panel-heading">
